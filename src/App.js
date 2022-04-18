@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { HeaderNav, HeaderTabs } from './components';
 import { routes } from './helpers';
 
 function App() {
@@ -8,6 +9,8 @@ function App() {
   });
   return (
     <>
+      <HeaderNav />
+      <HeaderTabs />
       <Routes>{routeElements}</Routes>
     </>
   );

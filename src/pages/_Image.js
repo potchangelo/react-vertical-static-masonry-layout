@@ -1,8 +1,10 @@
+import { Main } from '../layouts';
+
 function _Image() {
   return (
-    <main>
+    <Main>
       image
-    </main>
+    </Main>
   );
 }
 

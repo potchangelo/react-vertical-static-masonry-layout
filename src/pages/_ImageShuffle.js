@@ -1,8 +1,10 @@
+import { Main } from '../layouts';
+
 function _ImageShuffle() {
   return (
-    <main>
+    <Main>
       image shuffle
-    </main>
+    </Main>
   );
 }
 

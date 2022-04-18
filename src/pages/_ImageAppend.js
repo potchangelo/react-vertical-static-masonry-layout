@@ -1,8 +1,10 @@
+import { Main } from '../layouts';
+
 function _ImageAppend() {
   return (
-    <main>
+    <Main>
       image append
-    </main>
+    </Main>
   );
 }
 

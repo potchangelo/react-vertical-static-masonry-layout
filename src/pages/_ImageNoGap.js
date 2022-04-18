@@ -1,8 +1,10 @@
+import { Main } from '../layouts';
+
 function _ImageNoGap() {
   return (
-    <main>
+    <Main>
       image no gap
-    </main>
+    </Main>
   );
 }
 

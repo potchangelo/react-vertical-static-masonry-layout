@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import style from './css/masonry.module.scss';
 
 /**
@@ -16,7 +16,7 @@ const defaultBreakpoints = [
 ];
 
 /**
- * Masonry layout with position absolute, no scroll restoration
+ * Masonry layout by grid, might have scroll restoration
  * @param {object} props
  * @param {breakpoint[]} props.breakpoints
  */
@@ -24,10 +24,6 @@ function _Masonry(props) {
   // - Data
   const { breakpoints = defaultBreakpoints, children } = props;
   const [columnsHeights, setColumnsHeights] = useState([]);
-  const [computedStyles, setComputedStyles] = useState([]);
-  const layoutRef = useRef(null);
-  const layoutTimerRef = useRef(null);
-  const layoutStatusRef = useRef('done'); // restart, update, done
 
   // - Functions
   const getNextBreakpoint = useCallback(() => {
@@ -45,93 +41,8 @@ function _Masonry(props) {
     return nextBreakpoint;
   }, [breakpoints]);
 
-  const setLayout = useCallback((delay = 150) => {
-    clearTimeout(layoutTimerRef.current);
-    if (layoutStatusRef.current === 'done') return;
-
-    layoutTimerRef.current = setTimeout(() => {
-      const { columns } = getNextBreakpoint();
-
-      // Init heights array
-      let nextColumnsHeights = new Array(columns).fill().map(_ => 0);
-
-      // Get masonry child nodes from its ref
-      const { childNodes } = layoutRef.current;
-
-      // Build masonry items data
-      const nextComputedStyles = Array.from(childNodes).map(child => {
-        // Left
-        let left = 0;
-        const minHeightIndex = nextColumnsHeights.indexOf(Math.min(...nextColumnsHeights));
-        left = (minHeightIndex / nextColumnsHeights.length) * 100;
-
-        // Top
-        let top = 0;
-        const minHeight = Math.min(...nextColumnsHeights);
-        top = minHeight;
-
-        // Add height to selected column
-        nextColumnsHeights[minHeightIndex] += child.getBoundingClientRect().height;
-
-        return { left: `${left}%`, top: `${top}px` };
-      });
-
-      if (layoutStatusRef.current === 'restart') layoutStatusRef.current = 'update';
-      else if (layoutStatusRef.current === 'update') layoutStatusRef.current = 'done';
-
-      setColumnsHeights(nextColumnsHeights);
-      setComputedStyles(prevComputedStyles => {
-        return nextComputedStyles.map((computedStyle, index) => {
-          const style = Object.assign({}, computedStyle);
-          if (index >= prevComputedStyles.length) style.opacity = 0;
-          return style;
-        });
-      });
-    }, delay);
-  }, [getNextBreakpoint]);
-
-  const restartLayout = useCallback(
-    (delay = 0) => {
-      if (layoutStatusRef.current !== 'update') {
-        layoutStatusRef.current = 'restart';
-        setLayout(delay);
-      }
-    },
-    [setLayout]
-  );
-
-  const updateLayout = useCallback(
-    (delay = 0) => {
-      if (layoutStatusRef.current === 'update') {
-        setLayout(delay);
-      }
-    },
-    [setLayout]
-  );
-
-  const onResize = useCallback(() => restartLayout(), [restartLayout]);
-
-  // - Effects
-  // 1. Browser resized -> restart
-  useEffect(() => {
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [onResize]);
-
-  // 2. Data changed -> restart
-  useEffect(() => {
-    if (children === null) restartLayout(0);
-    else restartLayout();
-  }, [breakpoints, children, restartLayout]);
-
-  // 3. Style changed -> update
-  useEffect(() => {
-    updateLayout();
-  }, [columnsHeights, computedStyles, updateLayout]);
-
   // - Attributes
   const columnCount = columnsHeights.length;
-  const itemWidth = 100 / (columnCount || 1);
   const { gap = 0, outerGap = 0 } = getNextBreakpoint();
   const containerStyle = {
     padding: Array.isArray(outerGap) ? outerGap.map(g => `${g}px`).join(' ') : `${outerGap}px`
@@ -148,28 +59,15 @@ function _Masonry(props) {
   let childElements = null;
   if (!!children) {
     childElements = React.Children.map(children, (child, index) => {
-      if (index < computedStyles.length) {
-        const computedStyle = computedStyles[index];
-        const itemStyle = {
-          width: `${itemWidth}%`,
-          padding: `${gap / 2}px`,
-          ...computedStyle,
-        };
-        return React.cloneElement(child, {
-          key: `masonry_item_${index}`,
-          itemStyle,
-        });
-      }
       return React.cloneElement(child, {
-        key: `masonry_item_${index}`,
-        isLoading: true,
+        key: `masonry_item_${index}`
       });
     });
   }
 
   return (
     <div style={containerStyle}>
-      <div className={style.layout} ref={layoutRef} style={layoutStyle}>
+      <div className={style.layout} style={layoutStyle}>
         {childElements}
       </div>
     </div>

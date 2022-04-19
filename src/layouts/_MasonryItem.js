@@ -1,12 +1,12 @@
-import style from './css/masonry.module.scss';
-
+/**
+ * @param {object} props
+ * @param {number} props.height
+ * @param {import("react").CSSProperties} props.itemStyle
+ */
 function _MasonryItem(props) {
-  const { children } = props;
-
-  let itemClass = style.item;
-
+  const { itemStyle, children } = props;
   return (
-    <div className={itemClass}>
+    <div style={itemStyle}>
       <div>{children}</div>
     </div>
   );

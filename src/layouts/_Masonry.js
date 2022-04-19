@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import style from './css/masonry.module.scss';
 
 /**
@@ -19,14 +19,14 @@ const defaultBreakpoints = [
  * Masonry layout by grid, might have scroll restoration
  * @param {object} props
  * @param {breakpoint[]} props.breakpoints
+ * @param {import('react').ReactElement[]} props.children
  */
 function _Masonry(props) {
   // - Data
   const { breakpoints = defaultBreakpoints, children } = props;
-  const [columnsHeights, setColumnsHeights] = useState([]);
 
   // - Functions
-  const getNextBreakpoint = useCallback(() => {
+  function getNextBreakpoint() {
     let nextBreakpoint = breakpoints[0];
 
     // Get width
@@ -39,29 +39,43 @@ function _Masonry(props) {
       nextBreakpoint = breakpoint;
     });
     return nextBreakpoint;
-  }, [breakpoints]);
+  }
 
   // - Attributes
-  const columnCount = columnsHeights.length;
-  const { gap = 0, outerGap = 0 } = getNextBreakpoint();
+  const { columns, gap = 0, outerGap = 0 } = getNextBreakpoint();
   const containerStyle = {
     padding: Array.isArray(outerGap) ? outerGap.map(g => `${g}px`).join(' ') : `${outerGap}px`
   }
-  const layoutHeight = columnCount === 0 ? 0 : Math.max(...columnsHeights);
   const layoutStyle = {
-    height: `${layoutHeight}px`,
-    marginTop: `-${gap / 2}px`,
-    marginLeft: `-${gap / 2}px`,
-    marginRight: `-${gap / 2}px`,
+    gridTemplateColumns: `repeat(${columns}, 1fr)`,
+    columnGap: `${gap}px`,
+  };
+  const itemStyle = {
+    marginBottom: `${gap}px`
   };
 
   // - Elements
+  const columnsChildren = new Array(columns).fill().map(_ => []);
+  const columnsHeights = new Array(columns).fill().map(_ => 0);
+  children.forEach(child => {
+    const minHeightIndex = columnsHeights.indexOf(Math.min(...columnsHeights));
+    columnsChildren[minHeightIndex].push(child);
+    columnsHeights[minHeightIndex] += child.props.height ?? 0;
+  });
+
   let childElements = null;
   if (!!children) {
-    childElements = React.Children.map(children, (child, index) => {
-      return React.cloneElement(child, {
-        key: `masonry_item_${index}`
+    childElements = columnsChildren.map((columnChildren, index) => {
+      const columnElements = columnChildren.map(child => {
+        return React.cloneElement(child, {
+          itemStyle
+        });
       });
+      return (
+        <div key={`col-${index}`}>
+          {columnElements}
+        </div>
+      );
     });
   }
 

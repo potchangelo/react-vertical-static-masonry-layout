@@ -3,7 +3,7 @@
  * @param {{ title: string, photoUrl: string, width: number, height: number }} props.photo
  * @param {string} [props.extraClass]
  */
- function _ItemImage(props) {
+function _ItemImage(props) {
   const {
     photo: { title, photoUrl, width, height },
     extraClass,

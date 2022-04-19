@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import style from './css/masonry.module.scss';
 
 /**
@@ -25,8 +25,7 @@ function _Masonry(props) {
   // - Data
   const { breakpoints = defaultBreakpoints, children } = props;
 
-  // - Functions
-  function getNextBreakpoint() {
+  const getNextBreakpoint = useCallback(() => {
     let nextBreakpoint = breakpoints[0];
 
     // Get width
@@ -39,10 +38,25 @@ function _Masonry(props) {
       nextBreakpoint = breakpoint;
     });
     return nextBreakpoint;
-  }
+  }, [breakpoints]);
+
+  const [breakpoint, setBreakpoint] = useState(getNextBreakpoint());
+
+  const onResize = useCallback(() => {
+    const nextBreakpoint = getNextBreakpoint();
+    if (breakpoint.minWidth !== nextBreakpoint.minWidth) {
+      setBreakpoint(nextBreakpoint);
+    }
+  }, [breakpoint, getNextBreakpoint]);
+
+  // - Effect
+  useEffect(() => {
+    window.addEventListener('resize', onResize);
+    return () => { window.removeEventListener('resize', onResize); };
+  }, [onResize])
 
   // - Attributes
-  const { columns, gap = 0, outerGap = 0 } = getNextBreakpoint();
+  const { columns, gap = 0, outerGap = 0 } = breakpoint;
   const containerStyle = {
     padding: Array.isArray(outerGap) ? outerGap.map(g => `${g}px`).join(' ') : `${outerGap}px`
   }

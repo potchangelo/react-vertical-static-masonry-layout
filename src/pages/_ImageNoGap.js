@@ -1,3 +1,4 @@
+import { ItemImage } from '../components';
 import { samplePhotos } from '../helpers';
 import { Main, Masonry, MasonryItem } from '../layouts';
 
@@ -12,7 +13,7 @@ const breakpoints = [
 function _ImageNoGap() {
   const masonryItems = samplePhotos.map(photo => (
     <MasonryItem key={photo.id} height={photo.height}>
-      <img className="image" src={photo.photoUrl} alt={photo.title} />
+      <ItemImage photo={photo} />
     </MasonryItem>
   ));
   return (

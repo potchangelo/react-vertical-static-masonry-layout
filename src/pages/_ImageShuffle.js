@@ -34,9 +34,7 @@ function _ImageShuffle() {
   return (
     <>
       <Main>
-        <Masonry breakpoints={breakpoints}>
-          {masonryItems}
-        </Masonry>
+        <Masonry breakpoints={breakpoints}>{masonryItems}</Masonry>
       </Main>
       <button
         className="button is-primary"

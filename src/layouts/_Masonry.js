@@ -52,20 +52,22 @@ function _Masonry(props) {
   // - Effect
   useEffect(() => {
     window.addEventListener('resize', onResize);
-    return () => { window.removeEventListener('resize', onResize); };
-  }, [onResize])
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, [onResize]);
 
   // - Attributes
   const { columns, gap = 0, outerGap = 0 } = breakpoint;
   const containerStyle = {
-    padding: Array.isArray(outerGap) ? outerGap.map(g => `${g}px`).join(' ') : `${outerGap}px`
-  }
+    padding: Array.isArray(outerGap) ? outerGap.map(g => `${g}px`).join(' ') : `${outerGap}px`,
+  };
   const layoutStyle = {
     gridTemplateColumns: `repeat(${columns}, 1fr)`,
     columnGap: `${gap}px`,
   };
   const itemStyle = {
-    marginBottom: `${gap}px`
+    marginBottom: `${gap}px`,
   };
 
   // - Elements
@@ -82,14 +84,10 @@ function _Masonry(props) {
     childElements = columnsChildren.map((columnChildren, index) => {
       const columnElements = columnChildren.map(child => {
         return React.cloneElement(child, {
-          itemStyle
+          itemStyle,
         });
       });
-      return (
-        <div key={`col-${index}`}>
-          {columnElements}
-        </div>
-      );
+      return <div key={`col-${index}`}>{columnElements}</div>;
     });
   }
 

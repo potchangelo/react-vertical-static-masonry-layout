@@ -3,7 +3,7 @@ import { MasonryItem } from "..";
 
 test('Item has no content', () => {
   render(<MasonryItem />);
-  const item = screen.getByTestId('ms-item');
+  const item = screen.getByTestId('masonry-item');
   expect(item.innerText).toBeFalsy();
 });
 

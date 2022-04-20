@@ -89,7 +89,7 @@ function _Masonry(props) {
           itemStyle,
         });
       });
-      return <div key={`col-${index}`} data-testid="ms-column">{columnElements}</div>;
+      return <div key={`col-${index}`} data-testid="masonry-column">{columnElements}</div>;
     });
   }
 

@@ -6,7 +6,7 @@
 function _MasonryItem(props) {
   const { itemStyle, children } = props;
   return (
-    <div style={itemStyle} data-testid="ms-item">
+    <div style={itemStyle} data-testid="masonry-item">
       <div>{children}</div>
     </div>
   );

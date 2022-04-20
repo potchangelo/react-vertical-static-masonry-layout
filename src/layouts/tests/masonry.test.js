@@ -3,9 +3,9 @@ import { Masonry, MasonryItem } from "..";
 
 test('No items', () => {
   render(<Masonry />);
-  const columns = screen.queryAllByTestId('ms-column');
+  const columns = screen.queryAllByTestId('masonry-column');
   expect(columns.length).toBeFalsy();
-  const items = screen.queryAllByTestId('ms-item');
+  const items = screen.queryAllByTestId('masonry-item');
   expect(items.length).toBeFalsy();
 });
 
@@ -17,9 +17,9 @@ test('Has items', () => {
       <MasonryItem key="item-3" height={200} />
     </Masonry>
   );
-  const columns = screen.getAllByTestId('ms-column');
+  const columns = screen.getAllByTestId('masonry-column');
   expect(columns.length).toBeGreaterThanOrEqual(1);
-  const items = screen.getAllByTestId('ms-item');
+  const items = screen.getAllByTestId('masonry-item');
   expect(items.length).toBe(3);
 });
 
@@ -31,8 +31,8 @@ test('Has items without height', () => {
       <MasonryItem key="item-3" />
     </Masonry>
   );
-  const columns = screen.getAllByTestId('ms-column');
+  const columns = screen.getAllByTestId('masonry-column');
   expect(columns.length).toBeGreaterThanOrEqual(1);
-  const items = screen.getAllByTestId('ms-item');
+  const items = screen.getAllByTestId('masonry-item');
   expect(items.length).toBe(3);
 });

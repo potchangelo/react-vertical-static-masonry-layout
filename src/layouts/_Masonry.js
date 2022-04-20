@@ -73,16 +73,13 @@ function _Masonry(props) {
 
   // - Elements
   const childrenIsItem = children?.type === MasonryItem;
-  const childrenAreItems = (
-    Array.isArray(children) && children.every(child => child.type === MasonryItem)
-  );
+  const childrenAreItems = Array.isArray(children) && children.every(child => child.type === MasonryItem);
   const columnsChildren = new Array(columns).fill().map(_ => []);
   const columnsHeights = new Array(columns).fill().map(_ => 0);
   if (childrenIsItem) {
     columnsChildren[0].push(children);
     columnsHeights[0] += children.props.height ?? 1;
-  }
-  else if (childrenAreItems) {
+  } else if (childrenAreItems) {
     children.forEach(child => {
       const minHeightIndex = columnsHeights.indexOf(Math.min(...columnsHeights));
       columnsChildren[minHeightIndex].push(child);

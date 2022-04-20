@@ -17,12 +17,7 @@ function _Image() {
   ));
   return (
     <Main>
-      <Masonry breakpoints={breakpoints}>
-        {/* <MasonryItem key={samplePhotos[3].id} height={samplePhotos[3].height}>
-          <ItemImage photo={samplePhotos[3]} />
-        </MasonryItem> */}
-        {masonryItems}
-      </Masonry>
+      <Masonry breakpoints={breakpoints}>{masonryItems}</Masonry>
     </Main>
   );
 }

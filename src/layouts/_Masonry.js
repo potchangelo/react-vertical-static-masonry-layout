@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { MasonryItem } from '.';
 import style from './css/masonry.module.scss';
 
 /**
@@ -18,8 +19,8 @@ const defaultBreakpoints = [
 /**
  * Masonry layout by grid, might have scroll restoration
  * @param {object} props
- * @param {breakpoint[]} props.breakpoints
- * @param {import('react').ReactElement[]} props.children
+ * @param {breakpoint[]} [props.breakpoints]
+ * @param {import('react').ReactElement|import('react').ReactElement[]} [props.children]
  */
 function _Masonry(props) {
   // - Data
@@ -71,9 +72,17 @@ function _Masonry(props) {
   };
 
   // - Elements
+  const childrenIsItem = children?.type === MasonryItem;
+  const childrenAreItems = (
+    Array.isArray(children) && children.every(child => child.type === MasonryItem)
+  );
   const columnsChildren = new Array(columns).fill().map(_ => []);
   const columnsHeights = new Array(columns).fill().map(_ => 0);
-  if (Array.isArray(children)) {
+  if (childrenIsItem) {
+    columnsChildren[0].push(children);
+    columnsHeights[0] += children.props.height ?? 1;
+  }
+  else if (childrenAreItems) {
     children.forEach(child => {
       const minHeightIndex = columnsHeights.indexOf(Math.min(...columnsHeights));
       columnsChildren[minHeightIndex].push(child);
@@ -82,7 +91,7 @@ function _Masonry(props) {
   }
 
   let childElements = null;
-  if (!!children) {
+  if (childrenIsItem || childrenAreItems) {
     childElements = columnsChildren.map((columnChildren, index) => {
       const columnElements = columnChildren.map(child => {
         return React.cloneElement(child, {

@@ -21,7 +21,19 @@ test('No items', () => {
   expect(items.length).toBeFalsy();
 });
 
-test('Has items', () => {
+test('One item', () => {
+  render(
+    <Masonry>
+      <MasonryItem key="item-1" height={100} />
+    </Masonry>
+  );
+  const columns = screen.getAllByTestId('masonry-column');
+  expect(columns.length).toBeGreaterThanOrEqual(1);
+  const items = screen.getAllByTestId('masonry-item');
+  expect(items.length).toBe(1);
+});
+
+test('More than one items', () => {
   render(
     <Masonry>
       <MasonryItem key="item-1" height={100} />
@@ -35,7 +47,7 @@ test('Has items', () => {
   expect(items.length).toBe(3);
 });
 
-test('Has items without height', () => {
+test('Items without height', () => {
   render(
     <Masonry>
       <MasonryItem key="item-1" />
@@ -49,17 +61,17 @@ test('Has items without height', () => {
   expect(items.length).toBe(3);
 });
 
-// test('Wrong children type', () => {
-//   render(
-//     <Masonry>
-//       <span>Not masonry item</span>
-//     </Masonry>
-//   );
-//   const columns = screen.queryAllByTestId('masonry-column');
-//   expect(columns.length).toBeFalsy();
-//   const items = screen.queryAllByTestId('masonry-item');
-//   expect(items.length).toBeFalsy();
-// });
+test('Wrong children type', () => {
+  render(
+    <Masonry>
+      <span>Not masonry item</span>
+    </Masonry>
+  );
+  const columns = screen.queryAllByTestId('masonry-column');
+  expect(columns.length).toBeFalsy();
+  const items = screen.queryAllByTestId('masonry-item');
+  expect(items.length).toBeFalsy();
+});
 
 test('Resizing with default breakpoints', () => {
   render(

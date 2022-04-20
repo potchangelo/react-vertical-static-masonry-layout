@@ -73,11 +73,13 @@ function _Masonry(props) {
   // - Elements
   const columnsChildren = new Array(columns).fill().map(_ => []);
   const columnsHeights = new Array(columns).fill().map(_ => 0);
-  children.forEach(child => {
-    const minHeightIndex = columnsHeights.indexOf(Math.min(...columnsHeights));
-    columnsChildren[minHeightIndex].push(child);
-    columnsHeights[minHeightIndex] += child.props.height ?? 0;
-  });
+  if (Array.isArray(children)) {
+    children.forEach(child => {
+      const minHeightIndex = columnsHeights.indexOf(Math.min(...columnsHeights));
+      columnsChildren[minHeightIndex].push(child);
+      columnsHeights[minHeightIndex] += child.props.height ?? 1;
+    });
+  }
 
   let childElements = null;
   if (!!children) {
@@ -87,7 +89,7 @@ function _Masonry(props) {
           itemStyle,
         });
       });
-      return <div key={`col-${index}`}>{columnElements}</div>;
+      return <div key={`col-${index}`} data-testid="ms-column">{columnElements}</div>;
     });
   }
 

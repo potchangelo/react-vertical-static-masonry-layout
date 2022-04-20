@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { MasonryItem } from "..";
+import { render, screen } from '@testing-library/react';
+import { MasonryItem } from '..';
 
 test('Item has no content', () => {
   render(<MasonryItem />);

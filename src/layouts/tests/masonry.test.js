@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
-import { Masonry, MasonryItem } from "..";
+import { render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import { Masonry, MasonryItem } from '..';
 
 /**
  * @param {number} width

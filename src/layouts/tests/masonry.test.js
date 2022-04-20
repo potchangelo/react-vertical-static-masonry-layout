@@ -85,3 +85,28 @@ test('Resizing with default breakpoints', () => {
   const items2 = screen.getAllByTestId('masonry-item');
   expect(items2.length).toBeTruthy();
 });
+
+// test('Resizing with defined breakpoints', () => {
+//   render(
+//     <Masonry>
+//       <MasonryItem key="item-1" height={100} />
+//       <MasonryItem key="item-2" height={100} />
+//     </Masonry>
+//   );
+
+//   act(() => {
+//     resizeWindowWidth(600);
+//   });
+//   const columns = screen.getAllByTestId('masonry-column');
+//   expect(columns.length).toBe(2);
+//   const items = screen.getAllByTestId('masonry-item');
+//   expect(items.length).toBeTruthy();
+
+//   act(() => {
+//     resizeWindowWidth(380);
+//   });
+//   const columns2 = screen.getAllByTestId('masonry-column');
+//   expect(columns2.length).toBe(1);
+//   const items2 = screen.getAllByTestId('masonry-item');
+//   expect(items2.length).toBeTruthy();
+// });

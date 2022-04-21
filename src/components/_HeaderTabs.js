@@ -9,10 +9,16 @@ function _HeaderTabs() {
     return navClass;
   }
 
+  function onLinkClick() {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 10);
+  }
+
   const tabElements = routes.map(route => {
     const { id, url, title } = route;
     return (
-      <NavLink key={id} to={url} className={getNavClass} end>
+      <NavLink key={id} to={url} className={getNavClass} end onClick={onLinkClick}>
         {title}
       </NavLink>
     );

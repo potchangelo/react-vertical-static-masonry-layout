@@ -12,7 +12,7 @@ import style from './css/masonry.module.scss';
 
 const defaultBreakpoints = [
   { columns: 1, minWidth: 0, gap: 0 },
-  { columns: 2, minWidth: 600, gap: 24 },
+  { columns: 2, minWidth: 480, gap: 24 },
   { columns: 3, minWidth: 960, gap: 24 },
 ];
 

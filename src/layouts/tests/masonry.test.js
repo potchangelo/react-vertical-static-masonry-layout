@@ -74,51 +74,57 @@ test('Wrong children type', () => {
 });
 
 test('Resizing with default breakpoints', () => {
+  const expectedResults = [
+    { width: 400, columns: 1 },
+    { width: 800, columns: 2 },
+    { width: 1200, columns: 3 },
+  ];
+
   render(
     <Masonry>
+      <MasonryItem key="item-1" height={100} />
+    </Masonry>
+  );
+
+  expectedResults.forEach(result => {
+    act(() => {
+      resizeWindowWidth(result.width);
+    });
+    const columns = screen.getAllByTestId('masonry-column');
+    expect(columns.length).toBe(result.columns);
+    const items = screen.getAllByTestId('masonry-item');
+    expect(items.length).toBeTruthy();
+  });
+});
+
+test('Resizing with defined breakpoints', () => {
+  const expectedResults = [
+    { width: 400, columns: 1 },
+    { width: 800, columns: 3 },
+    { width: 1200, columns: 5 },
+    { width: 1600, columns: 7 },
+  ];
+  const breakpoints = [
+    { columns: 1, minWidth: 0 },
+    { columns: 3, minWidth: 500 },
+    { columns: 5, minWidth: 1000 },
+    { columns: 7, minWidth: 1500 },
+  ];
+
+  render(
+    <Masonry breakpoints={breakpoints}>
       <MasonryItem key="item-1" height={100} />
       <MasonryItem key="item-2" height={100} />
     </Masonry>
   );
 
-  act(() => {
-    resizeWindowWidth(600);
+  expectedResults.forEach(result => {
+    act(() => {
+      resizeWindowWidth(result.width);
+    });
+    const columns = screen.getAllByTestId('masonry-column');
+    expect(columns.length).toBe(result.columns);
+    const items = screen.getAllByTestId('masonry-item');
+    expect(items.length).toBeTruthy();
   });
-  const columns = screen.getAllByTestId('masonry-column');
-  expect(columns.length).toBe(2);
-  const items = screen.getAllByTestId('masonry-item');
-  expect(items.length).toBeTruthy();
-
-  act(() => {
-    resizeWindowWidth(380);
-  });
-  const columns2 = screen.getAllByTestId('masonry-column');
-  expect(columns2.length).toBe(1);
-  const items2 = screen.getAllByTestId('masonry-item');
-  expect(items2.length).toBeTruthy();
 });
-
-// test('Resizing with defined breakpoints', () => {
-//   render(
-//     <Masonry>
-//       <MasonryItem key="item-1" height={100} />
-//       <MasonryItem key="item-2" height={100} />
-//     </Masonry>
-//   );
-
-//   act(() => {
-//     resizeWindowWidth(600);
-//   });
-//   const columns = screen.getAllByTestId('masonry-column');
-//   expect(columns.length).toBe(2);
-//   const items = screen.getAllByTestId('masonry-item');
-//   expect(items.length).toBeTruthy();
-
-//   act(() => {
-//     resizeWindowWidth(380);
-//   });
-//   const columns2 = screen.getAllByTestId('masonry-column');
-//   expect(columns2.length).toBe(1);
-//   const items2 = screen.getAllByTestId('masonry-item');
-//   expect(items2.length).toBeTruthy();
-// });

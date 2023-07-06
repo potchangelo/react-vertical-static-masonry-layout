@@ -1,6 +1,6 @@
 # React Vertical Static Masonry Layout
 
-https://react-vertical-static-masonry-layout.netlify.app/
+https://react-vs-masonry-layout.netlify.app/
 
 React vertical static masonry layout examples by Zinglecode.
 
